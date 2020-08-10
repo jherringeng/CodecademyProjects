@@ -1,5 +1,6 @@
 import random
 
+# Starting money. Passed to play games and other functions
 money = 100
 
 #Write your game of chance functions here
@@ -79,9 +80,9 @@ def play_highest_card(money):
     elif cards[your_card] < cards[house_card]:
         print("You lost!!!")
         money -= player_bet
-
     else:
         print("You drew. Bet has been returned.")
+
     return money
 
 def play_roulette(money):
@@ -90,6 +91,7 @@ def play_roulette(money):
     player_bet = get_player_bet(money)
     player_call = None
     while True:
+        # Try to convert player call to an int to bet on single numbers
         try:
             player_call = get_player_call()
             if not player_call:
@@ -98,25 +100,31 @@ def play_roulette(money):
             if player_call_int > 36 or player_call_int < 1:
                 print("Enter a number between 1 and 36")
             else:
-                print("You bet on: ${}".format(player_call_int))
+                print("You bet on number {}.".format(player_call_int))
                 break
+        # Exception used for text input of player calls
         except ValueError:
             player_call = player_call.lower()
             if player_call not in ["odd", "even", "high", "low"]:
                 print("Please enter a valid bet.")
             else:
+                print("You bet on {}.".format(player_call))
                 break
+
+    # Number -1 used as 00 placement
     roulette_wheel = range(-1, 37)
     roulette_result = random.choice(roulette_wheel)
+    # Text formatted to replace -1 with 00
     if roulette_result == -1:
         roulette_result = "00"
         print("The roulette wheel spun {}.".format(roulette_result))
     else:
         print("The roulette wheel spun {}.".format(str(roulette_result)))
+
+    # Identify results and give winnings or losses
     if roulette_result <= 0:
         print("You lost!!!")
         money -= player_bet
-
     elif (player_call == roulette_result):
         print("You won!!!")
         money += 35 * player_bet
@@ -130,7 +138,7 @@ def play_roulette(money):
         elif player_call == "low" and roulette_result <= 18:
             print("You won!!!")
             money += player_bet
-        elif player_call == "high" and roulette_result >= 19:
+        elif player_call == "high" and roulette_result > 18:
             print("You won!!!")
             money += player_bet
         else:
@@ -162,6 +170,7 @@ def get_coin_flip():
         coin_flip = "tails"
     return coin_flip
 
+# Gets what the player is betting on. Repeats until input given
 def get_player_call():
     player_call = None
     while True:
@@ -173,6 +182,7 @@ def get_player_call():
 
     return player_call
 
+# Gets the players bet. Repeats until valid bet given
 def get_player_bet(money):
     print("You have ${}".format(money))
     while True:
@@ -189,10 +199,11 @@ def get_player_bet(money):
                 print("Your bet is: ${}".format(player_bet))
                 break
         except ValueError:
-            print("Oops!  That was no valid bet. Try again...")
+            print("Oops! That was not a valid bet. Try again...")
 
     return player_bet
 
+# Gets the players choice of game. Repeats until valid input given. Does not check if valid game
 def get_game_choice():
     while True:
         try:
@@ -205,15 +216,9 @@ def get_game_choice():
 
     return game_choice
 
-#Call your game of chance functions here
-# money = play_roulette(money)
-# money = play_highest_card(money)
-# money = play_heads_or_tails(money)
-# money = play_cho_han(money)
-
+# Function for the player to choose and play games.
 def play_games(money):
     print("Welcome to the Codecademy Casino!\n")
-
 
     while True:
         if money <= 0:
@@ -222,6 +227,7 @@ def play_games(money):
         else:
             print("You have ${}".format(money))
             game_choice = get_game_choice()
+            # May replace the following with function calls from a list
             if game_choice == 1:
                 print("You chose Coin Toss.\n")
                 money = play_heads_or_tails(money)
@@ -237,4 +243,5 @@ def play_games(money):
             else:
                 print("Oops! You did not choose a valid game.")
 
+# Calls the casino to play games. Main function
 play_games(money)
