@@ -6,7 +6,7 @@ money = 100
 def play_heads_or_tails(money):
     print("\nYou are now playing heads or tails.")
     print("Guess whether the coin flip is heads or tails.")
-    player_bet = get_player_bet()
+    player_bet = get_player_bet(money)
     player_call = None
     print("Enter heads or tails:")
     while True:
@@ -26,13 +26,13 @@ def play_heads_or_tails(money):
     else:
         print("You lost!!!")
         money -= player_bet
-        money = game_over(money)
+
     return money
 
 def play_cho_han(money):
     print("\nYou are now playing Cho-Han.")
     print("Guess whether adding 2 dice is odd or even.")
-    player_bet = get_player_bet()
+    player_bet = get_player_bet(money)
     player_call = None
     print("Enter odd or even:")
     while True:
@@ -52,13 +52,13 @@ def play_cho_han(money):
     else:
         print("You lost!!!")
         money -= player_bet
-        money = game_over(money)
+
     return money
 
 def play_highest_card(money):
     print("\nYou are now playing Highest Card.")
     print("Whoever picks the highest card wins. Aces are valued at 11. Jack, Queen and King are valued at 10.")
-    player_bet = get_player_bet()
+    player_bet = get_player_bet(money)
     cards = {"Ace": 11, "2": 2, "3": 3, "4": 4, "5": 5,
         "6": 6, "7": 7, "8": 8, "9": 9, "10": 10,
         "Jack": 10, "Queen": 10, "King":10}
@@ -79,7 +79,7 @@ def play_highest_card(money):
     elif cards[your_card] < cards[house_card]:
         print("You lost!!!")
         money -= player_bet
-        money = game_over(money)
+
     else:
         print("You drew. Bet has been returned.")
     return money
@@ -87,7 +87,7 @@ def play_highest_card(money):
 def play_roulette(money):
     print("\nYou are now playing roulette.")
     print("Bet on where the ball will land. Bet on single numbers or groups of numbers such as odd and even.")
-    player_bet = get_player_bet()
+    player_bet = get_player_bet(money)
     player_call = None
     while True:
         try:
@@ -116,7 +116,7 @@ def play_roulette(money):
     if roulette_result <= 0:
         print("You lost!!!")
         money -= player_bet
-        money = game_over(money)
+
     elif (player_call == roulette_result):
         print("You won!!!")
         money += 35 * player_bet
@@ -136,19 +136,10 @@ def play_roulette(money):
         else:
             print("You lost!!!")
             money -= player_bet
-            money = game_over(money)
+
     else:
         print("You lost!!!")
         money -= player_bet
-        money = game_over(money)
-
-    return money
-
-def game_over(money):
-    if money <= 0:
-        print("You are out of money. Better luck next time!")
-        print("Your money has been reset.")
-        money = 100
 
     return money
 
@@ -182,7 +173,7 @@ def get_player_call():
 
     return player_call
 
-def get_player_bet():
+def get_player_bet(money):
     print("You have ${}".format(money))
     while True:
         try:
@@ -202,8 +193,48 @@ def get_player_bet():
 
     return player_bet
 
+def get_game_choice():
+    while True:
+        try:
+            print("\nEnter number to choose a game.")
+            print("1: Coin Toss, 2: Cho Han, 3: Highest Card, 4: Roulette")
+            game_choice = int(input("Which game do you want to play: "))
+            break
+        except ValueError:
+            print("Oops! That was not a valid input. Try again...")
+
+    return game_choice
+
 #Call your game of chance functions here
-money = play_roulette(money)
-money = play_highest_card(money)
-money = play_heads_or_tails(money)
-money = play_cho_han(money)
+# money = play_roulette(money)
+# money = play_highest_card(money)
+# money = play_heads_or_tails(money)
+# money = play_cho_han(money)
+
+def play_games(money):
+    print("Welcome to the Codecademy Casino!\n")
+
+
+    while True:
+        if money <= 0:
+            print("You are out of money! Please gamble responsibly.")
+            break
+        else:
+            print("You have ${}".format(money))
+            game_choice = get_game_choice()
+            if game_choice == 1:
+                print("You chose Coin Toss.\n")
+                money = play_heads_or_tails(money)
+            elif game_choice == 2:
+                print("You chose Cho Han.\n")
+                money = play_cho_han(money)
+            elif game_choice == 3:
+                print("You chose Highest Card.\n")
+                money = play_highest_card(money)
+            elif game_choice == 4:
+                print("You chose Roulette.\n")
+                money = play_roulette(money)
+            else:
+                print("Oops! You did not choose a valid game.")
+
+play_games(money)

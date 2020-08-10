@@ -35,7 +35,7 @@ namespace ConsoleGame
     public new static char UpdateCursor(string keyPress)
         {
 
-          char cursor;
+          char cursor = '0';
 
             if (keyPress == "DownArrow")
             {
@@ -62,7 +62,7 @@ namespace ConsoleGame
         public new static int KeepInBounds(int currentCoord, int maxCoord)
         {
 
-          int newCoord;
+          int newCoord = currentCoord;
 
             if (currentCoord >= maxCoord)
             {
