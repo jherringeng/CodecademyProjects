@@ -1,6 +1,12 @@
+import copy
 
 class Pokemon:
-    def __init__(self, name, level = 1, type = "Fire"):
+
+    # All pokemon types
+    pokemon_types = ["Normal", "Fire", "Water", "Grass", "Flying", "Fighting", "Poison", "Electric", "Ground", "Rock", "Psychic", "Ice", "Bug", "Ghost", "Steel", "Dragon", "Dark", "Fairy"]
+
+    # Constructor. Default values for name, level and type
+    def __init__(self, name = "Unknown", level = 1, type = "Fire"):
         self.knocked_out = False
         self.name = name
         if level <= 0:
@@ -8,10 +14,10 @@ class Pokemon:
             self.level = 1
         else:
             self.level = level
-        if type in ["Fire", "Earth", "Water", "Grass", "Electric"]:
+        if type in self.pokemon_types:
             self.type = type
         else:
-            print("Type not recognised. Setting as Fire.")
+            print("Type not recognised. Setting type as Fire.")
             self.type = "Fire"
         self.max_health = 10 * self.level
         self.health = self.max_health
@@ -66,7 +72,10 @@ class Trainer:
     def __init__(self, name, pokemons, potions = 1):
         self.name = name
         self.potions = potions
+        # Pokemons passed in as list
         self.pokemons = pokemons
+        # Added this to class to simplify logic of determining which Pokemons are knocked knocked out
+        # If a Pokemon is knocked out they are removed from available_pokemons
         self.available_pokemons = pokemons
         self.current_pokemon = pokemons[0]
 
@@ -84,6 +93,7 @@ class Trainer:
     def switch_pokemon(self):
         print("Enter number to choose your pokemon!")
         i = 1
+        # Uses available_pokemons list to simplify logic
         for pokemon in self.available_pokemons:
             print(str(i) + ". " + pokemon.name)
             i += 1
@@ -100,9 +110,17 @@ class Trainer:
             except ValueError:
                 print("Oops!  That was not recognised. Try again...")
 
+    # New function to restore pokemons between fights
+    def restore_pokemons(self):
+        for pokemon in self.pokemons:
+            pokemon.health = pokemon.max_health
+            print("{} is healed and now has {} health.".format(pokemon.name, pokemon.health))
+        # Overwrite available_pokemons with pokemons (probably more reliable than adding them again in loop)
+        self.available_pokemons = copy.deepcopy(self.pokemons)
+
     def choose_option(self):
         if self.potions > 0 and len(self.available_pokemons) > 1:
-            print("Enter 1 to use potion and 2 to change Pokemon.")
+            print("Enter 1 to use potion and 2 to change Pokemon. Press Enter to continue.")
             user_choice = input()
             if user_choice == "1":
                 self.use_potion()
@@ -128,6 +146,8 @@ pikachu = Pokemon("Pikachu", 10, "Electric")
 charmander = Pokemon("Charmander", 10, "Fire")
 weepinbell = Pokemon("Weepinbell", 5, "Grass")
 venusaur = Pokemon("Venusaur", 15, "Grass")
+luxray = Pokemon("Luxray", 12, "Electric")
+snorlax = Pokemon("Snorlax", 13, "Normal")
 
 ash = Trainer("Ash", [pikachu, charmander, weepinbell], 2)
 team_rocket = Trainer("Team Rocket", [charmander, pikachu, weepinbell, venusaur], 2)
@@ -148,6 +168,10 @@ def check_pokemon_available(attack_team, opp_team):
     else:
         opp_team.switch_pokemon()
         return True
+
+
+def battle(your_team, their_team):
+    pass
 
 print("Pick your starting Pokemon!")
 ash.switch_pokemon()
