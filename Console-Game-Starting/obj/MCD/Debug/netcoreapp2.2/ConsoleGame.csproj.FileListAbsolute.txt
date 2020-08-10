@@ -1,0 +1,16 @@
+C:\Users\admin\Desktop\Console-Game-Starting\obj\MCD\Debug\netcoreapp2.2\ConsoleGame.csprojAssemblyReference.cache
+C:\Users\admin\Desktop\Console-Game-Starting\obj\MCD\Debug\netcoreapp2.2\ConsoleGame.csproj.CoreCompileInputs.cache
+C:\Users\admin\Desktop\Console-Game-Starting\obj\MCD\Debug\netcoreapp2.2\ConsoleGame.AssemblyInfoInputs.cache
+C:\Users\admin\Desktop\Console-Game-Starting\obj\MCD\Debug\netcoreapp2.2\ConsoleGame.AssemblyInfo.cs
+C:\Users\admin\Desktop\Codecademy Projects\Console-Game-Starting\bin\MCD\Debug\netcoreapp2.2\ConsoleGame.deps.json
+C:\Users\admin\Desktop\Codecademy Projects\Console-Game-Starting\bin\MCD\Debug\netcoreapp2.2\ConsoleGame.runtimeconfig.json
+C:\Users\admin\Desktop\Codecademy Projects\Console-Game-Starting\bin\MCD\Debug\netcoreapp2.2\ConsoleGame.runtimeconfig.dev.json
+C:\Users\admin\Desktop\Codecademy Projects\Console-Game-Starting\bin\MCD\Debug\netcoreapp2.2\ConsoleGame.dll
+C:\Users\admin\Desktop\Codecademy Projects\Console-Game-Starting\bin\MCD\Debug\netcoreapp2.2\ConsoleGame.pdb
+C:\Users\admin\Desktop\Codecademy Projects\Console-Game-Starting\obj\MCD\Debug\netcoreapp2.2\ConsoleGame.csprojAssemblyReference.cache
+C:\Users\admin\Desktop\Codecademy Projects\Console-Game-Starting\obj\MCD\Debug\netcoreapp2.2\ConsoleGame.AssemblyInfoInputs.cache
+C:\Users\admin\Desktop\Codecademy Projects\Console-Game-Starting\obj\MCD\Debug\netcoreapp2.2\ConsoleGame.AssemblyInfo.cs
+C:\Users\admin\Desktop\Codecademy Projects\Console-Game-Starting\obj\MCD\Debug\netcoreapp2.2\ConsoleGame.csproj.CoreCompileInputs.cache
+C:\Users\admin\Desktop\Codecademy Projects\Console-Game-Starting\obj\MCD\Debug\netcoreapp2.2\ConsoleGame.dll
+C:\Users\admin\Desktop\Codecademy Projects\Console-Game-Starting\obj\MCD\Debug\netcoreapp2.2\ConsoleGame.pdb
+C:\Users\admin\Desktop\Codecademy Projects\Console-Game-Starting\obj\MCD\Debug\netcoreapp2.2\ConsoleGame.genruntimeconfig.cache
