@@ -56,7 +56,7 @@ namespace ConsoleGame
               cursor = 'v';
             }
 
-            return 'v';
+            return cursor;
         }
 
         public new static int KeepInBounds(int currentCoord, int maxCoord)
