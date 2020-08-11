@@ -1,4 +1,4 @@
-import copy
+import random
 
 class Pokemon:
 
@@ -84,29 +84,36 @@ class Pokemon:
         print("{self_name} attacks {opp_name}!".format(self_name = self.name, opp_name = opp_pokemon.name))
 
         # Identify type and modify damage on strength or weakness
-        if self.type == "Fire":
-            if opp_pokemon.type in ["Bug", "Steel", "Grass", "Ice"]: # Strong against
-                damage *= 2
-            elif opp_pokemon.type in ["Rock", "Fire", "Water", "Dragon"]: # Weak against
-                damage /= 2
-        if self.type == "Water":
-            if opp_pokemon.type in ["Ground", "Rock", "Fire"]: # Strong against
-                damage *= 2
-            elif opp_pokemon.type in ["Water", "Grass", "Dragon"]: # Weak against
-                damage /= 2
-        if self.type == "Grass":
-            if opp_pokemon.type in ["Ground", "Rock", "Water"]: # Strong against
-                damage *= 2
-            elif opp_pokemon.type in ["Flying", "Poison", "Bug", "Steel", "Fire", "Grass", "Dragon"]: # Weak against
-                damage /= 2
-        if self.type == "Electric":
-            if opp_pokemon.type in ["Flying", "Water"]: # Strong against
-                damage *= 2
-            elif opp_pokemon.type in ["Ground", "Grass", "Electric", "Dragon"]: # Weak against
-                damage /= 2
+        if opp_pokemon.type in self.pokemon_strong_against[self.type]:
+            damage *= 2
+            print("{} does double damage against {}!".format(self.name, opp_pokemon.name))
+        elif opp_pokemon.type in self.pokemon_weak_against[self.type]:
+            damage *= 2
+            print("{} does half damage against {}.".format(self.name, opp_pokemon.name))
+        # Remove after further testing
+
+        # if self.type == "Fire":
+        #     if opp_pokemon.type in ["Bug", "Steel", "Grass", "Ice"]: # Strong against
+        #         damage *= 2
+        #     elif opp_pokemon.type in ["Rock", "Fire", "Water", "Dragon"]: # Weak against
+        #         damage /= 2
+        # if self.type == "Water":
+        #     if opp_pokemon.type in ["Ground", "Rock", "Fire"]: # Strong against
+        #         damage *= 2
+        #     elif opp_pokemon.type in ["Water", "Grass", "Dragon"]: # Weak against
+        #         damage /= 2
+        # if self.type == "Grass":
+        #     if opp_pokemon.type in ["Ground", "Rock", "Water"]: # Strong against
+        #         damage *= 2
+        #     elif opp_pokemon.type in ["Flying", "Poison", "Bug", "Steel", "Fire", "Grass", "Dragon"]: # Weak against
+        #         damage /= 2
+        # if self.type == "Electric":
+        #     if opp_pokemon.type in ["Flying", "Water"]: # Strong against
+        #         damage *= 2
+        #     elif opp_pokemon.type in ["Ground", "Grass", "Electric", "Dragon"]: # Weak against
+        #         damage /= 2
         # Damage pokemon
         opp_pokemon.lose_health(damage)
-
 
 
 class Trainer:
@@ -146,6 +153,7 @@ class Trainer:
                 if chosen_pokemon < 1 or chosen_pokemon > len(self.available_pokemons):
                     print("Please enter number for Pokemon between 1 and {}".format(len(self.available_pokemons)))
                 else:
+                    # Reduces for array
                     chosen_pokemon -= 1
                     self.current_pokemon = self.available_pokemons[chosen_pokemon]
                     print("You choose {}!".format(self.current_pokemon.name))
@@ -187,22 +195,25 @@ class Trainer:
                 self.switch_pokemon()
             return
 
-pikachu = Pokemon("Pikachu", 10, "Electric")
-charmander = Pokemon("Charmander", 10, "Fire")
-weepinbell = Pokemon("Weepinbell", 5, "Grass")
-venusaur = Pokemon("Venusaur", 15, "Grass")
-luxray = Pokemon("Luxray", 12, "Electric")
-snorlax = Pokemon("Snorlax", 13, "Normal")
-tyranitar = Pokemon("Tyranitar", 8, "Rock")
-flygon = Pokemon("Flygon", 10, "Dragon")
-squirtle = Pokemon("Squirtle", 12, "Water")
-typhlosion = Pokemon("Typhlosion", 11, "Fire")
-absol = Pokemon("Absol", 13, "Dark")
-eevee = Pokemon("Eevee", 8, "Normal")
-lucario = Pokemon("Lucario", 9, "Steel")
+pikachu = Pokemon("Pikachu", random.randint(1, 15), "Electric")
+charmander = Pokemon("Charmander", random.randint(1, 15), "Fire")
+weepinbell = Pokemon("Weepinbell", random.randint(1, 15), "Grass")
+venusaur = Pokemon("Venusaur", random.randint(1, 15), "Grass")
+luxray = Pokemon("Luxray", random.randint(1, 15), "Electric")
+snorlax = Pokemon("Snorlax", random.randint(1, 15), "Normal")
+tyranitar = Pokemon("Tyranitar", random.randint(1, 15), "Rock")
+flygon = Pokemon("Flygon", random.randint(1, 15), "Dragon")
+squirtle = Pokemon("Squirtle", random.randint(1, 15), "Water")
+typhlosion = Pokemon("Typhlosion", random.randint(1, 15), "Fire")
+absol = Pokemon("Absol", random.randint(1, 15), "Dark")
+eevee = Pokemon("Eevee", random.randint(1, 15), "Normal")
+lucario = Pokemon("Lucario", random.randint(1, 15), "Steel")
 
-ash = Trainer("Ash", [pikachu, charmander, weepinbell], 2)
-team_rocket = Trainer("Team Rocket", [charmander, pikachu, weepinbell, venusaur], 2)
+pokemon_created = [pikachu, charmander, weepinbell, venusaur, luxray, snorlax,
+    tyranitar, flygon, squirtle, squirtle, typhlosion, absol, eevee, lucario]
+
+ash = Trainer("Ash", random.choices(pokemon_created, k=3), 2)
+team_rocket = Trainer("Team Rocket", random.choices(pokemon_created, k=3), 2)
 
 # Functions to check if pokemon knocked out and whether another available.
 # Return bool for use in if statement
@@ -231,12 +242,15 @@ def battle(your_team, their_team):
     i = 1
     while True:
         print("\nRound " + str(i) + "\n")
+
         your_team.choose_option()
+        print("Your attack:")
         your_team.attack_trainer(their_team)
         if check_pokemon_knocked_out(their_team):
             if not check_pokemon_available(your_team, their_team):
                 break
 
+        print("Their attack:")
         their_team.attack_trainer(your_team)
         if check_pokemon_knocked_out(your_team):
             if not check_pokemon_available(their_team, your_team):
