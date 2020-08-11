@@ -4,6 +4,47 @@ class Pokemon:
 
     # All pokemon types
     pokemon_types = ["Normal", "Fire", "Water", "Grass", "Flying", "Fighting", "Poison", "Electric", "Ground", "Rock", "Psychic", "Ice", "Bug", "Ghost", "Steel", "Dragon", "Dark", "Fairy"]
+    pokemon_strong_against = {
+        "Normal": [],
+        "Fighting": ["Normal", "Rock", "Steel", "Ice", "Dark"],
+        "Flying": ["Fighting", "Bug", "Grass"],
+        "Poison": ["Grass", "Fairy"],
+        "Ground": ["Poison", "Rock", "Steel", "Fire", "Electric"],
+        "Rock": ["Flying", "Bug", "Fire", "Ice"],
+        "Bug": ["Grass", "Psychic", "Dark"],
+        "Ghost": ["Ghost", "Psychic"],
+        "Steel": ["Rock", "Ice", "Fairy"],
+        "Fire": ["Bug", "Steel", "Grass", "Ice"],
+        "Water": ["Ground", "Rock", "Fire"],
+        "Grass": ["Ground", "Rock", "Water"],
+        "Electric": ["Flying", "Water"],
+        "Psychic": ["Fighting", "Poison"],
+        "Ice": ["Flying", "Ground", "Grass", "Dragon"],
+        "Dragon": ["Dragon"],
+        "Fairy": ["Fighting", "Dragon", "Dark"],
+        "Dark": ["Ghost", "Psychic"]
+    }
+
+    pokemon_weak_against = {
+        "Normal": ["Rock", "Ghost", "Steel"],
+        "Fighting": ["Flying", "Poison", "Psychic", "Bug", "Ghost", "Fairy"],
+        "Flying": ["Rock", "Steel", "Electric"],
+        "Poison": ["Poison", "Ground", "Rock", "Ghost", "Steel"],
+        "Ground": ["Flying", "Bug", "Grass"],
+        "Rock": ["Fighting", "Ground", "Steel"],
+        "Bug": ["Fighting", "Flying", "Poison", "Ghost", "Steel", "Fire", "Fairy"],
+        "Ghost": ["Normal", "Dark"],
+        "Steel": ["Steel", "Fire", "Water", "Electric"],
+        "Fire": ["Rock", "Fire", "Water", "Dragon"],
+        "Water": ["Water", "Grass", "Dragon"],
+        "Grass": ["Flying", "Poison", "Bug", "Steel", "Fire", "Grass", "Dragon"],
+        "Electric": ["Ground", "Grass", "Electric", "Dragon"],
+        "Psychic": ["Steel", "Psychic", "Dark"],
+        "Ice": ["Steel", "Fire", "Water", "Ice"],
+        "Dragon": ["Steel", "Fairy"],
+        "Fairy": ["Poison", "Steel", "Fire"],
+        "Dark": ["Fighting", "Dark", "Fairy"]
+    }
 
     # Constructor. Default values for name, level and type
     def __init__(self, name = "Unknown", level = 1, type = "Fire"):
@@ -72,11 +113,11 @@ class Trainer:
     def __init__(self, name, pokemons, potions = 1):
         self.name = name
         self.potions = potions
-        # Pokemons passed in as list
-        self.pokemons = pokemons
+        # Pokemons passed in as list. list() used to make copy not reference
+        self.pokemons = list(pokemons)
         # Added this to class to simplify logic of determining which Pokemons are knocked knocked out
         # If a Pokemon is knocked out they are removed from available_pokemons
-        self.available_pokemons = pokemons
+        self.available_pokemons = list(pokemons)
         self.current_pokemon = pokemons[0]
 
     def attack_trainer(self, opp_trainer):
@@ -88,14 +129,16 @@ class Trainer:
             self.current_pokemon.health = self.current_pokemon.max_health
         print("You healed {name}. {name} now has {health} health!".format(name = self.current_pokemon.name, health = self.current_pokemon.health))
         self.potions -= 1
-        print("You now have {potions} potions.".format(potions = self.potions))
+        # print("You now have {potions} potions.".format(potions = self.potions)) # Removed as duplicate
 
     def switch_pokemon(self):
         print("Enter number to choose your pokemon!")
         i = 1
         # Uses available_pokemons list to simplify logic
         for pokemon in self.available_pokemons:
-            print(str(i) + ". " + pokemon.name)
+            print("{option}. {name} - {type}.".format(option = str(i), name = pokemon.name, type = pokemon.type))
+            print("   Strong against: {}.".format(", ".join(pokemon.pokemon_strong_against[pokemon.type])), end =" ")
+            print("  Weak against: {}.".format(", ".join(pokemon.pokemon_weak_against[pokemon.type])))
             i += 1
         while True:
             try:
@@ -116,7 +159,9 @@ class Trainer:
             pokemon.health = pokemon.max_health
             print("{} is healed and now has {} health.".format(pokemon.name, pokemon.health))
         # Overwrite available_pokemons with pokemons (probably more reliable than adding them again in loop)
-        self.available_pokemons = copy.deepcopy(self.pokemons)
+        self.available_pokemons = list(self.pokemons)
+        print("{}'s Pokemons are healed up!\n".format(self.name))
+
 
     def choose_option(self):
         if self.potions > 0 and len(self.available_pokemons) > 1:
@@ -148,10 +193,19 @@ weepinbell = Pokemon("Weepinbell", 5, "Grass")
 venusaur = Pokemon("Venusaur", 15, "Grass")
 luxray = Pokemon("Luxray", 12, "Electric")
 snorlax = Pokemon("Snorlax", 13, "Normal")
+tyranitar = Pokemon("Tyranitar", 8, "Rock")
+flygon = Pokemon("Flygon", 10, "Dragon")
+squirtle = Pokemon("Squirtle", 12, "Water")
+typhlosion = Pokemon("Typhlosion", 11, "Fire")
+absol = Pokemon("Absol", 13, "Dark")
+eevee = Pokemon("Eevee", 8, "Normal")
+lucario = Pokemon("Lucario", 9, "Steel")
 
 ash = Trainer("Ash", [pikachu, charmander, weepinbell], 2)
 team_rocket = Trainer("Team Rocket", [charmander, pikachu, weepinbell, venusaur], 2)
 
+# Functions to check if pokemon knocked out and whether another available.
+# Return bool for use in if statement
 def check_pokemon_knocked_out(opp_team):
     if opp_team.current_pokemon.knocked_out:
         print("{}'s pokemon is knocked out!".format(opp_team.name))
@@ -161,9 +215,10 @@ def check_pokemon_knocked_out(opp_team):
         return False
 
 def check_pokemon_available(attack_team, opp_team):
+    # Win condition: No more pokemon in available_pokemons
     if len(opp_team.available_pokemons) == 0:
         print("{} has no more Pokemon available!".format(opp_team.name))
-        print(attack_team.name + " wins!!!")
+        print("\n!!! " + attack_team.name + " wins!!!\n")
         return False
     else:
         opp_team.switch_pokemon()
@@ -171,22 +226,27 @@ def check_pokemon_available(attack_team, opp_team):
 
 
 def battle(your_team, their_team):
-    pass
+    print("Pick your starting Pokemon!")
+    ash.switch_pokemon()
+    i = 1
+    while True:
+        print("\nRound " + str(i) + "\n")
+        your_team.choose_option()
+        your_team.attack_trainer(their_team)
+        if check_pokemon_knocked_out(their_team):
+            if not check_pokemon_available(your_team, their_team):
+                break
 
-print("Pick your starting Pokemon!")
-ash.switch_pokemon()
-i = 1
-while True:
-    print("\nRound " + str(i) + "\n")
-    ash.choose_option()
-    ash.attack_trainer(team_rocket)
-    if check_pokemon_knocked_out(team_rocket):
-        if not check_pokemon_available(ash, team_rocket):
-            break
+        their_team.attack_trainer(your_team)
+        if check_pokemon_knocked_out(your_team):
+            if not check_pokemon_available(their_team, your_team):
+                break
 
-    team_rocket.attack_trainer(ash)
-    if check_pokemon_knocked_out(ash):
-        if not check_pokemon_available(team_rocket, ash):
-            break
+        # Increment round
+        i += 1
 
-    i += 1
+
+battle(ash, team_rocket)
+ash.restore_pokemons()
+team_rocket.restore_pokemons()
+battle(ash, team_rocket)
